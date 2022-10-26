@@ -1,23 +1,34 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import axios from "axios";
+import {Route,Routes} from "react-router-dom";
+import Home from "./components/Home/HomePage";
+import QuizList from './components/QuizList/QuizList';
+import AddQuestion from './components/AddQuestion/AddQuestion';
+import EditQuestion from './components/EditQuestion/EditQuestion';
+import Race from "./components/Race/Race";
 
 function App() {
+
+  const [questionData,setQuestionData] =useState([]);
+  const getQuestionData = async () => {
+    const response = await axios.get(`http://localhost:3000/questions`);
+    setQuestionData(response.data);
+  }
+
+  useEffect(()=>{
+    getQuestionData()
+  },[])
+  // console.log(questionData);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Routes>
+        <Route path='/' element = {<Home />} />
+        <Route path='/quizList' element={<QuizList questionData={questionData} setQuestionData={setQuestionData} getQuestionData={getQuestionData} />} />
+        <Route path='/createQuiz' element={<AddQuestion questionData={questionData} setQuestionData={setQuestionData} />} />
+        <Route path='editQuestion/:id' element={<EditQuestion setQuestionData={setQuestionData} questionData={questionData} getQuestionData={getQuestionData}  />} />
+        <Route path='/race' element={<Race questionData={questionData} />} />
+      </Routes>
     </div>
   );
 }

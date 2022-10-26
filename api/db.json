@@ -1,0 +1,46 @@
+{
+  "questions": [
+    {
+      "text": "azerbaycanin paytaxti haradir?",
+      "answerOption": "baki",
+      "score": "2",
+      "options": [
+        "baki",
+        "gence",
+        "sumqayit"
+      ],
+      "time": "15",
+      "id": 1
+    },
+    {
+      "text": "Londonun paytaxti handiri?adaad",
+      "answerOption": "London",
+      "score": "1",
+      "options": [
+        "Baki ",
+        "London",
+        "Gence"
+      ],
+      "time": "5",
+      "id": 2
+    },
+    {
+      "text": "ada",
+      "options": [
+        {
+          "value": "ghgh"
+        },
+        {
+          "value": "fgfg"
+        },
+        {
+          "value": "ghghg"
+        }
+      ],
+      "answerOption": "fgfg",
+      "time": "12",
+      "score": "1",
+      "id": 3
+    }
+  ]
+}
