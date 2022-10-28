@@ -12,8 +12,9 @@ const Reace = ({ questionData }) => {
     const [totalPoint, setTotalPoint] = useState(0);
     const [usedTime, setUsedTime] = useState(0);
     const [clicked, setClicked] = useState(false);
-    const [remainTime, setRemainTime] = useState(15);
+    const [remainTime, setRemainTime] = useState(7);
     const [timeOff, setTimeOff] = useState(false);
+    
 
 
 
@@ -31,7 +32,7 @@ const Reace = ({ questionData }) => {
         return currentDate;
     }
     
-    let timer=null;
+    let timer=null; 
 
     useEffect(()=>{
         if(!timeOff){
@@ -45,8 +46,6 @@ const Reace = ({ questionData }) => {
                 if(currentQuestion < questionData.length -1){
                     setCurrentQuestion(currentQuestion +1);
                     setTimeOff(false);
-                    let timeout = questionData[currentQuestion].time;
-                    setRemainTime(timeout);
                 }
             }
         }else{
@@ -58,6 +57,8 @@ const Reace = ({ questionData }) => {
             clearInterval(timer);
         }
     },[timeOff,remainTime,info])
+
+    
 
 
     const handleShowResult = () => {
@@ -108,16 +109,20 @@ const Reace = ({ questionData }) => {
     }
 
     const handleNextQuestion = () => {
-        for (let i = 0; i < buttonRef.current.children.length; i++) {
-            buttonRef.current.children[i].classList.remove("false")
-            buttonRef.current.children[i].classList.remove("correct");
-        }
-        setClicked(false)
-        if (currentQuestion < questionData.length - 1) {
-            setCurrentQuestion(currentQuestion + 1);
-            setTimeOff(false)
-            let timeout = questionData[currentQuestion].time;
-            setRemainTime(timeout)
+        try {
+            for (let i = 0; i < buttonRef.current.children.length; i++) {
+                buttonRef.current.children[i].classList.remove("false")
+                buttonRef.current.children[i].classList.remove("correct");
+            }
+            setClicked(false)
+            if (currentQuestion < questionData.length - 1) {
+                setCurrentQuestion(currentQuestion + 1);
+                setTimeOff(false);
+                let timeout = questionData[currentQuestion].time;
+                setRemainTime(timeout);
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
@@ -131,6 +136,10 @@ const Reace = ({ questionData }) => {
     // console.log(showResult);
     // console.log(info);
     // console.log(infoResult);
+    // questionData[currentQuestion]?.options.map(option=>{
+    //     console.log(option);
+    // })
+
     return (
         <div>
             {
@@ -150,10 +159,10 @@ const Reace = ({ questionData }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {console.log(info.length)}
+                                {/* {console.log(info.length)} */}
                                 {
                                     info.slice(0,10)?.map((eachInfo,index) =>(
-                                        <tr>
+                                        <tr key={index}>
                                         <th scope="col">{index + 1}</th>
                                         <td>{eachInfo.questionCount}</td>
                                         <td>{eachInfo.trueAnswer}</td>
@@ -164,7 +173,6 @@ const Reace = ({ questionData }) => {
                                     </tr> 
                                     ))
                                 }
-
                             </tbody>
                         </table>
                         <div className="back-home"><Link className="back-home-link" to="/">Back to Home Page</Link></div>
@@ -173,17 +181,16 @@ const Reace = ({ questionData }) => {
                         <h3 className='third'>Sual: {`${currentQuestion + 1} / ${questionData.length}`} </h3>
                         <div className="question-wrapper">
                             <div className="time-wrapper">
-                                {`00 : ${remainTime.toString().length === 1 ? String(0) + remainTime : remainTime} `}
+                                {`00 : ${remainTime?.toString().length === 1 ? String(0) + remainTime : remainTime} `}
                             </div>
                             <div className="question-title">
                                 <h3>{questionData[currentQuestion]?.text}</h3>
                             </div>
                             <div className="question-content" ref={buttonRef}>
-
                                 {
-                                    questionData[currentQuestion]?.options.map((option, index) => {
+                                    questionData?.[currentQuestion]?.options?.map((option, index) => {
                                         return <button className="question-button" key={index} onClick={(e) => handleCorrectAnswer(e)} disabled={clicked}>
-                                            {option}
+                                            {option.value}
                                         </button>
                                     })
                                 }

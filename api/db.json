@@ -1,44 +1,56 @@
 {
   "questions": [
     {
-      "text": "azerbaycanin paytaxti haradir?",
-      "answerOption": "baki",
-      "score": "2",
+      "text": "Azerbaycanin paytaxti haradir?",
       "options": [
-        "baki",
-        "gence",
-        "sumqayit"
+        {
+          "value": "Baki"
+        },
+        {
+          "value": "Gence"
+        },
+        {
+          "value": "Sumqayit"
+        }
       ],
-      "time": "15",
+      "answerOption": "Baki",
+      "time": 7,
+      "score": "1",
       "id": 1
     },
     {
-      "text": "Londonun paytaxti handiri?adaad",
-      "answerOption": "London",
-      "score": "1",
+      "text": "Ingilterenin paytaxti hansidir?",
       "options": [
-        "Baki ",
-        "London",
-        "Gence"
+        {
+          "value": "London"
+        },
+        {
+          "value": "Chelsea"
+        },
+        {
+          "value": "City"
+        }
       ],
-      "time": "5",
+      "answerOption": "London",
+      "time": 10,
+      "score": "1",
       "id": 2
     },
     {
-      "text": "ada",
+      "text": "Elvinin adi nedir?",
       "options": [
         {
-          "value": "ghgh"
+          "value": "Anar"
         },
         {
-          "value": "fgfg"
+          "value": "Elvin"
         },
         {
-          "value": "ghghg"
+          "value": "Cavid"
         }
       ],
-      "answerOption": "fgfg",
-      "time": "12",
+      "answerOption": "Elvin",
+      "time": 5,
       "score": "1",
       "id": 3
     }
