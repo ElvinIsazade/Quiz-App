@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import "./Race.css";
-import {Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Reace = ({ questionData }) => {
 
@@ -12,10 +12,8 @@ const Reace = ({ questionData }) => {
     const [totalPoint, setTotalPoint] = useState(0);
     const [usedTime, setUsedTime] = useState(0);
     const [clicked, setClicked] = useState(false);
-    const [remainTime, setRemainTime] = useState(7);
-    const [timeOff, setTimeOff] = useState(false);
-    
-
+    const [remainTime, setRemainTime] = useState(null);
+    const [timeSwitchOff, settimeSwitchOff] = useState(false);
 
 
     const infoResult = localStorage.getItem("info") ? JSON.parse(localStorage.getItem("info")) : []
@@ -26,53 +24,71 @@ const Reace = ({ questionData }) => {
 
     const buttonRef = useRef(null);
 
+    useEffect(() => {
+        if (currentQuestion === 0 && questionData?.length > 0) {
+            setRemainTime(questionData[currentQuestion].time);
+        };
+    }, [questionData]);
+
+
+    useEffect(() => {
+        if (!timeSwitchOff) {
+            if (remainTime !== 0) {
+                timer = setInterval(() => {
+                    setRemainTime(remainTime - 1);
+                    console.log(questionData);
+                }, 1000)
+            } else {
+                clearInterval(timer);
+                setFalseQuestion(falseQuestion +1);
+                findUsedTimeout();
+                let _currentQuestion = currentQuestion + 1;
+                // console.log('currr: ', _currentQuestion);
+                if (currentQuestion < questionData?.length - 1) {
+                    setCurrentQuestion(currentQuestion + 1);
+                    settimeSwitchOff(false);
+                    let timeout = questionData[_currentQuestion].time;
+                    setRemainTime(timeout);
+                }
+            }
+        } else {
+            clearInterval(timer);
+        }
+        localStorage.setItem("info", JSON.stringify(info))
+
+        return () => {
+            clearInterval(timer);
+        }
+    }, [timeSwitchOff, remainTime, info]);
+
+    // console.log('remain time: ', remainTime);
+
+    // useEffect(() => {
+    //     console.log('questionData: ', questionData);
+    //     // if (questionData && questionData.length > 0) {
+    //     //     setInitialRendering(true);
+    //     //     console.log('yeap', questionData);
+    //     //     setRemainTime(questionData?.[currentQuestion]?.time);
+    //     // }
+    // }, [questionData]);
+
+    let timer = null;
+
     const getTimeNow = () => {
         const date = new Date();
         const currentDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
         return currentDate;
-    }
-    
-    let timer=null; 
-
-    useEffect(()=>{
-        if(!timeOff){
-            if(remainTime !== 0){
-                timer = setInterval(()=>{
-                    setRemainTime(remainTime-1)
-                },1000)
-            }else{
-                clearInterval(timer);
-                findUsedTimeout();
-                if(currentQuestion < questionData.length -1){
-                    setCurrentQuestion(currentQuestion +1);
-                    setTimeOff(false);
-                }
-            }
-        }else{
-            clearInterval(timer);
-        }
-        localStorage.setItem("info",JSON.stringify(info))
-
-        return ()=>{
-            clearInterval(timer);
-        }
-    },[timeOff,remainTime,info])
-
-    
-
+    };
 
     const handleShowResult = () => {
         setShowResult(true);
         let time = "";
-        console.log(usedTime);
         if (usedTime < 60) {
-            console.log("length " + usedTime.toString().length,"type " + typeof(usedTime.toString().length));
             if (usedTime.toString().length === 2) {
                 time = `00:${usedTime}`
             } else {
                 time = `00:0${usedTime}`
             }
-            console.log(time);
         } else {
             let minute = Math.floor(Number(usedTime / 60));
             let second = usedTime - (60 * minute);
@@ -89,7 +105,7 @@ const Reace = ({ questionData }) => {
                 time = `${minute}:${second}`;
             }
         }
-        setInfo([{ "questionCount": questionData.length, "trueAnswer": correctQuestion, "falseAnswer": falseQuestion, "total": totalPoint,"usedTime" : time, "date": getTimeNow() }, ...infoResult])
+        setInfo([{ "questionCount": questionData.length, "trueAnswer": correctQuestion, "falseAnswer": falseQuestion, "total": totalPoint, "usedTime": time, "date": getTimeNow() }, ...infoResult])
     }
 
     const handleCorrectAnswer = (e) => {
@@ -100,12 +116,12 @@ const Reace = ({ questionData }) => {
             setCorrectQuestion(correctQuestion + 1);
             setTotalPoint(totalPoint + Number(questionData[currentQuestion].score));
         } else {
-            answer.classList.add("false")
-            setFalseQuestion(falseQuestion + 1)
+            answer.classList.add("false");
+            setFalseQuestion(falseQuestion + 1);
         }
         setClicked(true)
         findUsedTimeout();
-        setTimeOff(true)
+        settimeSwitchOff(true)
     }
 
     const handleNextQuestion = () => {
@@ -114,10 +130,10 @@ const Reace = ({ questionData }) => {
                 buttonRef.current.children[i].classList.remove("false")
                 buttonRef.current.children[i].classList.remove("correct");
             }
-            setClicked(false)
+            setClicked(false);
             if (currentQuestion < questionData.length - 1) {
                 setCurrentQuestion(currentQuestion + 1);
-                setTimeOff(false);
+                settimeSwitchOff(false);
                 let timeout = questionData[currentQuestion].time;
                 setRemainTime(timeout);
             }
@@ -161,16 +177,16 @@ const Reace = ({ questionData }) => {
                             <tbody>
                                 {/* {console.log(info.length)} */}
                                 {
-                                    info.slice(0,10)?.map((eachInfo,index) =>(
+                                    info.slice(0, 10)?.map((eachInfo, index) => (
                                         <tr key={index}>
-                                        <th scope="col">{index + 1}</th>
-                                        <td>{eachInfo.questionCount}</td>
-                                        <td>{eachInfo.trueAnswer}</td>
-                                        <td>{eachInfo.falseAnswer}</td>
-                                        <td>{eachInfo.total}</td>
-                                        <td>{eachInfo.usedTime}</td>
-                                        <td>{eachInfo.date}</td>
-                                    </tr> 
+                                            <th scope="col">{index + 1}</th>
+                                            <td>{eachInfo.questionCount}</td>
+                                            <td>{eachInfo.trueAnswer}</td>
+                                            <td>{eachInfo.falseAnswer}</td>
+                                            <td>{eachInfo.total}</td>
+                                            <td>{eachInfo.usedTime}</td>
+                                            <td>{eachInfo.date}</td>
+                                        </tr>
                                     ))
                                 }
                             </tbody>
@@ -178,11 +194,15 @@ const Reace = ({ questionData }) => {
                         <div className="back-home"><Link className="back-home-link" to="/">Back to Home Page</Link></div>
                     </div>)
                     : (<div className='race-wrapper'>
-                        <h3 className='third'>Sual: {`${currentQuestion + 1} / ${questionData.length}`} </h3>
+                        <h3 className='third'>Sual: {`${currentQuestion + 1} / ${questionData?.length}`} </h3>
                         <div className="question-wrapper">
-                            <div className="time-wrapper">
-                                {`00 : ${remainTime?.toString().length === 1 ? String(0) + remainTime : remainTime} `}
-                            </div>
+                            {
+                                remainTime !== null ? (
+                                    <div className="time-wrapper">
+                                        {`00 : ${remainTime?.toString().length === 1 ? String(0) + remainTime : remainTime} `}
+                                    </div>
+                                ) : null
+                            }
                             <div className="question-title">
                                 <h3>{questionData[currentQuestion]?.text}</h3>
                             </div>

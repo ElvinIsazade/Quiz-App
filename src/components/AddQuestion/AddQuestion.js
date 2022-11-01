@@ -26,7 +26,7 @@ const validationSchema = Yup.object({
 })
 
 
-const AddQuestion = ({ questionData, setQuestionData }) => {
+const AddQuestion = ({ questionData, setQuestionData,setShowQuestionList }) => {
 
     const navigate = useNavigate();
 
@@ -270,7 +270,7 @@ const AddQuestion = ({ questionData, setQuestionData }) => {
                     <Button variant="outlined" type='reset' color="error" onClick={() => formik.resetForm({ values: "" })} disabled={!formik.dirty}>
                         Temizle
                     </Button>
-                    <Button variant="contained" type='submit' color="success" disabled={!formik.dirty || formik.isSubmitting}>
+                    <Button onClick={()=>setShowQuestionList(false)} variant="contained" type='submit' color="success" disabled={!formik.dirty || formik.isSubmitting}>
                         Success
                     </Button>
                     <Link style={{ textDecoration: "none" }} to={"/quizList"}>

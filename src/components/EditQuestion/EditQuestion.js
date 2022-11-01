@@ -9,7 +9,10 @@ const validationSchema = Yup.object({
     text : Yup.string().required("Sual bos buraxila bilmez"),
     answerOption : Yup.string().required("Cavab bos buraxila bilmez"),
     score : Yup.number().min(1).max(20).integer().required("Xal bos buraxila bilmez"),
-    time : Yup.number().integer().min(1).max(20).required("Vaxt bos buraxila bilmez")
+    time : Yup.number().integer().min(1).max(20).required("Vaxt bos buraxila bilmez"),
+    options : Yup.array().of(Yup.object().shape({
+        value : Yup.string().required("Secimler bos buraxila bilmez")
+    })).required("Require-field")
 })
 
 
@@ -20,6 +23,17 @@ const EditQuestion = ({setQuestionData,questionData,getQuestionData}) => {
             answerOption: "",
             score : "",
             time : "",
+            options : [
+                {
+                    "value" : ""
+                },
+                {
+                    "value" : ""
+                },
+                {
+                    "value" : ""
+                }
+            ]
             // enableReinitialize : true
         },
         validationSchema : validationSchema,
@@ -53,20 +67,28 @@ const EditQuestion = ({setQuestionData,questionData,getQuestionData}) => {
         // setEditQuestion(selectQuestion.data);
     }
 
-    const handlerInputChange = (name,value)=>{
-        formik.setFieldValue(name,value)
+    const handlerInputChange = (name,value,isOption=false,dataAttribute)=>{
+        if(!isOption){
+            formik.setFieldValue(name,value);
+        }else{
+            const newOption = formik.values.options;
+            newOption[dataAttribute.dataset.index] = {value}
+            formik.setFieldValue("options",newOption)
+        }
         // setEditQuestion({...editQuestion,[name] : value})
     }
 
     useEffect(()=>{
-        getChoosingQuestion(id)
+        getChoosingQuestion(id);
     },[])
 
-    // const handleEditSubmit = async (e) =>{
+    // const handleEditSubmit = async (e) => {
+
     //     e.preventDefault();
-    //     await axios.put(`http://localhost:3000/questions/${id}`, editQuestion)
+    //     await axios.put(`http://localhost:3000/questions/${id}`, editQuestion);
     //     getQuestionData();
     //     navigate("/quizList");
+    
     // }
     // console.log(questionData);
     console.log(formik);
@@ -95,6 +117,64 @@ const EditQuestion = ({setQuestionData,questionData,getQuestionData}) => {
                     {
                         (formik.errors.answerOption && formik.touched.answerOption) && <p style={{color:"red"}}>{formik.errors.answerOption}</p>
                     }
+                </div>
+                <div className="question_wrapper_input">
+                    <label htmlFor="" style={{marginBottom: "5px"}}>
+                        Variantlar : 
+                    </label>
+                    <div className='option_wrapper'>
+                        <div className='option_list'>
+                            <input
+                                data-index={0}
+                                className='option_input'
+                                placeholder='Secim 1'
+                                type="text"
+                                name='option'
+                                onBlur={formik.handleBlur}
+                                onChange={(e) => handlerInputChange(e.target.name, e.target.value, true, e.target)}
+                                value={formik.values.options[0]?.["value"]}
+                                id="option_1"
+                            // onChange={optionChange}
+                            />
+                            {
+                                (formik.touched?.option && formik.errors.options?.[0]?.value) && <p style={{ color: "red" }}>{formik.errors.options?.[0]?.value}</p>
+                            }
+                        </div>
+                        <div className='option_list'>
+                            <input
+                                data-index={1}
+                                className='option_input'
+                                placeholder='Secim 2'
+                                type="text"
+                                name='option'
+                                onBlur={formik.handleBlur}
+                                onChange={(e) => handlerInputChange(e.target.name, e.target.value, true, e.target)}
+                                value={formik.values.options[1]?.["value"]}
+                                id="option_2"
+                            // onChange={optionChange}
+                            />
+                            {
+                                (formik.touched?.option && formik.errors.options?.[1]?.value) && <p style={{ color: "red" }}>{formik.errors.options?.[1]?.value}</p>
+                            }
+                        </div>
+                        <div className='option_list'>
+                            <input
+                                data-index={2}
+                                className='option_input'
+                                placeholder='Secim 3'
+                                type="text"
+                                name='option'
+                                onBlur={formik.handleBlur}
+                                onChange={(e) => handlerInputChange(e.target.name, e.target.value, true, e.target)}
+                                value={formik.values.options[2]?.["value"]}
+                                id="option_3"
+                            // onChange={optionChange}
+                            />
+                            {
+                                (formik.touched?.option && formik.errors.options?.[2]?.value) && <p style={{ color: "red" }}>{formik.errors.options?.[2]?.value}</p>
+                            }
+                        </div>
+                    </div>
                 </div>
                 <div className="question_wrapper_input">
                     <label htmlFor="">Score</label>

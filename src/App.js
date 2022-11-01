@@ -11,6 +11,7 @@ import Race from "./components/Race/Race";
 function App() {
 
   const [questionData,setQuestionData] =useState([]);
+  const [showQuestionList,setShowQuestionList] = useState(false);
   const getQuestionData = async () => {
     const response = await axios.get(`http://localhost:3000/questions`);
     setQuestionData(response.data);
@@ -18,14 +19,15 @@ function App() {
 
   useEffect(()=>{
     getQuestionData()
-  },[])
+  },[]);
+  
   // console.log(questionData);
   return (
     <div className="app">
       <Routes>
         <Route path='/' element = {<Home />} />
-        <Route path='/quizList' element={<QuizList questionData={questionData} setQuestionData={setQuestionData} getQuestionData={getQuestionData} />} />
-        <Route path='/createQuiz' element={<AddQuestion questionData={questionData} setQuestionData={setQuestionData} />} />
+        <Route path='/quizList' element={<QuizList questionData={questionData} showQuestionList={showQuestionList} setShowQuestionList={setShowQuestionList} setQuestionData={setQuestionData} getQuestionData={getQuestionData} />} />
+        <Route path='/createQuiz' element={<AddQuestion setShowQuestionList={setShowQuestionList} questionData={questionData} setQuestionData={setQuestionData} />} />
         <Route path='editQuestion/:id' element={<EditQuestion setQuestionData={setQuestionData} questionData={questionData} getQuestionData={getQuestionData}  />} />
         <Route path='/race' element={<Race questionData={questionData} />} />
       </Routes>

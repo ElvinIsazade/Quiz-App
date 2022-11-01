@@ -28,17 +28,27 @@
 .delete {
     margin-right: 12px;
     font-size: 24px;
-    color: red;
 }
+
 .button-delete{
     background-color: transparent;
     border: none;
     outline: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.button-delete:hover{
+    color: red;
 }
 .button-edit{
     background-color: transparent;
     border: none;
     outline: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.button-edit:hover{
+    color: blue;
 }
 
 
@@ -83,4 +93,9 @@ tr:nth-child(even) {
     background-color: dodgerblue;
     color: #fff;
     border-radius: 5px;
+}
+.no-question{
+    color: #fff;
+    text-align: center;
+    margin-top: 44px;
 }

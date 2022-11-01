@@ -1,7 +1,7 @@
 {
   "questions": [
     {
-      "text": "Azerbaycanin paytaxti haradir?",
+      "text": "Azerbaycanin paytaxti hansidir???aaa",
       "options": [
         {
           "value": "Baki"
@@ -13,26 +13,26 @@
           "value": "Sumqayit"
         }
       ],
-      "answerOption": "Baki",
-      "time": 7,
+      "answerOption": "Bakiaaa",
+      "time": "12",
       "score": "1",
       "id": 1
     },
     {
-      "text": "Ingilterenin paytaxti hansidir?",
+      "text": "En guclu kamanda hansidir?",
       "options": [
         {
-          "value": "London"
+          "value": "Celsi"
         },
         {
-          "value": "Chelsea"
+          "value": "Arsenal"
         },
         {
-          "value": "City"
+          "value": "Manchester CityElbetteki"
         }
       ],
-      "answerOption": "London",
-      "time": 10,
+      "answerOption": "Manchester CityElbetteki",
+      "time": "10",
       "score": "1",
       "id": 2
     },
@@ -40,17 +40,17 @@
       "text": "Elvinin adi nedir?",
       "options": [
         {
-          "value": "Anar"
+          "value": "Elvin"
         },
         {
-          "value": "Elvin"
+          "value": "Anar"
         },
         {
           "value": "Cavid"
         }
       ],
-      "answerOption": "Elvin",
-      "time": 5,
+      "answerOption": "Elvina",
+      "time": "10",
       "score": "1",
       "id": 3
     }
